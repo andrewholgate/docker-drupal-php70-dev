@@ -84,7 +84,8 @@ RUN apt-get -y install sudo && \
     usermod -a -G sudo ubuntu
 
 # Clean-up installation.
-RUN DEBIAN_FRONTEND=noninteractive apt-get autoclean && apt-get autoremove
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y autoclean && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y autoremove
 
 RUN service apache2 restart
 RUN service php7.0-fpm start
