@@ -8,8 +8,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip doxygen && \
     DEBIAN_FRONTEND=noninteractive pip install sphinx_rtd_theme breathe
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-dev
-
 # Install XDebug
 RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0RC2.tar.gz && \
     tar zxvf XDEBUG_2_4_0RC2.tar.gz && \
