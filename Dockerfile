@@ -78,6 +78,9 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm
     sed -ri 's/^;xmlrpc_errors\s*=\s*0/xmlrpc_errors = 1/g' /etc/php/7.0/fpm/php.ini && \
     sed -ri 's/^;xmlrpc_errors\s*=\s*0/xmlrpc_errors = 1/g' /etc/php/7.0/cli/php.ini
 
+# Disable Google Pagespeed
+RUN sed -ri 's/\s*ModPagespeed on/    ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
+
 # Grant ubuntu user access to sudo with no password.
 RUN apt-get -y install sudo && \
     echo "ubuntu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
