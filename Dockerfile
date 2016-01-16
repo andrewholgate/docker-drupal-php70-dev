@@ -1,4 +1,4 @@
-FROM andrewholgate/drupal-php70:0.2.0
+FROM andrewholgate/drupal-php70:0.3.0
 MAINTAINER Andrew Holgate <andrewholgate@yahoo.com>
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -8,15 +8,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip doxygen && \
     DEBIAN_FRONTEND=noninteractive pip install sphinx_rtd_theme breathe
 
-# Install XDebug
-RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0RC2.tar.gz && \
-    tar zxvf XDEBUG_2_4_0RC2.tar.gz && \
-    cd xdebug-XDEBUG_2_4_0RC2 && \
+# Install XDebug 2.4.0 RC3
+RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0RC3.tar.gz && \
+    tar zxvf XDEBUG_2_4_0RC3.tar.gz && \
+    rm -f XDEBUG_2_4_0RC3.tar.gz && \
+    cd xdebug-XDEBUG_2_4_0RC3 && \
     phpize && \
     ./configure --enable-xdebug && \
     make && \
     cp modules/xdebug.so /usr/lib/php/20151012/ && \
-    cd .. && rm -Rf xdebug-XDEBUG_2_4_0RC2
+    rm -Rf ../xdebug-XDEBUG_2_4_0RC3
 
 COPY xdebug.ini /etc/php/mods-available/xdebug.ini
 RUN ln -s /etc/php/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini
@@ -27,25 +28,26 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/
 # Install XHProf
 #RUN wget https://github.com/phacility/xhprof/archive/master.tar.gz && \
 #    tar zxvf master.tar.gz && \
+#    rm -f master.tar.gz
 #    cd xhprof-master/extension/ && \
 #    phpize && \
 #    ./configure --with-php-config=/usr/bin/php-config7.0 && \
 #    make && \
 #    make install && \
 #    make test && \
-#    cd .. && rm -RF xhprof-master
+#    rm -Rf ../xhprof-master
 
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.2.3
+# Install Node 4.2.4 LTS
 RUN cd /opt && \
-  wget https://nodejs.org/dist/v4.2.3/node-v4.2.3-linux-x64.tar.gz && \
-  tar -xzf node-v4.2.3-linux-x64.tar.gz && \
-  mv node-v4.2.3-linux-x64 node && \
+  wget https://nodejs.org/dist/v4.2.4/node-v4.2.4-linux-x64.tar.gz && \
+  tar -xzf node-v4.2.4-linux-x64.tar.gz && \
+  mv node-v4.2.4-linux-x64 node && \
   cd /usr/local/bin && \
   ln -s /opt/node/bin/* . && \
-  rm -f /opt/node-v4.2.3-linux-x64.tar.gz
+  rm -f /opt/node-v4.2.4-linux-x64.tar.gz
 
 USER ubuntu
 RUN echo 'export PATH="$PATH:$HOME/.npm-packages/bin"' >> ~/.bashrc && \
