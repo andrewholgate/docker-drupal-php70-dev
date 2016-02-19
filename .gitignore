@@ -1,2 +1,4 @@
 build.log
 docker-compose.yml
+local/*
+!local/*.dist

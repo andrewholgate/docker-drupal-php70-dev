@@ -88,6 +88,11 @@ RUN apt-get -y install sudo && \
     echo "ubuntu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     usermod -a -G sudo ubuntu
 
+# Load custom .bashrc settings if available.
+USER ubuntu
+RUN echo 'LOCAL_BASHRC="$HOME/.local/bashrc"; test -f "${LOCAL_BASHRC}" && source "${LOCAL_BASHRC}"' >> ~/.bashrc
+USER root
+
 # Clean-up installation.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y autoclean && \
     DEBIAN_FRONTEND=noninteractive apt-get -y autoremove
