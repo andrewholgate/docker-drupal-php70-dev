@@ -40,14 +40,14 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.2.4 LTS
+# Install Node 4.3.1 LTS
 RUN cd /opt && \
-  wget https://nodejs.org/dist/v4.2.4/node-v4.2.4-linux-x64.tar.gz && \
-  tar -xzf node-v4.2.4-linux-x64.tar.gz && \
-  mv node-v4.2.4-linux-x64 node && \
+  wget https://nodejs.org/dist/v4.3.1/node-v4.3.1-linux-x64.tar.gz && \
+  tar -xzf node-v4.3.1-linux-x64.tar.gz && \
+  mv node-v4.3.1-linux-x64 node && \
   cd /usr/local/bin && \
   ln -s /opt/node/bin/* . && \
-  rm -f /opt/node-v4.2.4-linux-x64.tar.gz
+  rm -f /opt/node-v4.3.1-linux-x64.tar.gz
 
 USER ubuntu
 RUN echo 'export PATH="$PATH:$HOME/.npm-packages/bin"' >> ~/.bashrc && \
