@@ -58,12 +58,12 @@ sudo docker exec -it dockerdrupalphp70dev_drupalphp70devweb_1 su - ubuntu
 ```
 
 ## Local customisations
+
 ```bash
 # Customize scripts in local folders.
 cp local/bashrc.dist local/bashrc
 vim local/bashrc
 ```
-
 
 # TODO
 

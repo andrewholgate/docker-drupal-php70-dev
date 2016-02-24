@@ -12,5 +12,7 @@ find_git_branch() {
   echo $git_branch;
 }
 
-
 PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:`find_git_branch`\w\$ '
+
+# XDebug config to work with CLI.
+export XDEBUG_CONFIG="remote_host=$(/sbin/ip route|awk '/default/ { print $3 }')"
