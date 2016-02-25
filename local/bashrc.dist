@@ -1,0 +1,18 @@
+find_git_branch() {
+  # Based on: https://github.com/jimeh/git-aware-prompt http://stackoverflow.com/a/13003854/170413
+  local branch
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      branch='detached'
+    fi
+    git_branch="($branch)"
+  else
+    git_branch=""
+  fi
+  echo $git_branch;
+}
+
+PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:`find_git_branch`\w\$ '
+
+# XDebug config to work with CLI.
+export XDEBUG_CONFIG="remote_host=$(/sbin/ip route|awk '/default/ { print $3 }')"

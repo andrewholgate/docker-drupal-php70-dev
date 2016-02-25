@@ -5,6 +5,7 @@ Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with H
 ## Debugging Tools
 
 - [XDebug](http://www.xdebug.org/) - PHP debugging and profiling.
+- [XHProf](http://pecl.php.net/package/xhprof) - function-level hierarchical profiler.
 
 ## Front-end Tools
 
@@ -37,7 +38,7 @@ cp docker-compose.yml.dist docker-compose.yml
 vim docker-compose.yml
 
 # Build docker containers using Docker Composer.
-sudo docker-compose build
+sudo docker-compose build --no-cache
 sudo docker-compose up -d
 ```
 
@@ -47,7 +48,7 @@ From the host server, add the web container IP address to the hosts file.
 
 ```bash
 # Add IP address to hosts file.
-./hosts.sh
+./host.sh
 ```
 
 ## Logging into Web Front-end
@@ -57,6 +58,24 @@ From the host server, add the web container IP address to the hosts file.
 sudo docker exec -it dockerdrupalphp70dev_drupalphp70devweb_1 su - ubuntu
 ```
 
-# TODO
+## Local customisations
 
-- [XHProf](http://pecl.php.net/package/xhprof) - function-level hierarchical profiler.
+```bash
+# Customize scripts in local folders.
+cp local/bashrc.dist local/bashrc
+vim local/bashrc
+```
+
+## XDebug enable and disable
+
+Note that XDebug CLI is disabled by default.
+
+```bash
+# Turn XDebug on / off in Apache.
+xdebug on
+xdebug off
+
+# Turn XDebug on / off fopr both Apache and CLI.
+xdebug on-all
+xdebug off-all
+```

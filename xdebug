@@ -1,0 +1,59 @@
+#!/bin/bash
+# Turn XDebug on and off for Apache and CLI.
+
+XDEBUG_CLI=/etc/php/7.0/cli/conf.d/20-xdebug.ini
+XDEBUG_FPM=/etc/php/7.0/fpm/conf.d/20-xdebug.ini
+
+function on_cli {
+  if [ ! -f $XDEBUG_CLI ]; then
+    sudo ln -s /etc/php/mods-available/xdebug.ini $XDEBUG_CLI
+  fi
+}
+
+function on_fpm {
+  if [ ! -f $XDEBUG_FPM ]; then
+    sudo ln -s /etc/php/mods-available/xdebug.ini $XDEBUG_FPM
+  fi
+}
+
+function off_cli {
+  if [ -f $XDEBUG_CLI ]; then
+    sudo rm $XDEBUG_CLI
+  fi
+}
+
+function off_fpm {
+  if [ -f $XDEBUG_FPM ]; then
+    sudo rm $XDEBUG_FPM
+  fi
+}
+
+case "$1" in
+  on)
+    on_fpm
+    ;;
+  off)
+    off_fpm
+    ;;
+  on-all)
+    on_cli
+    on_fpm
+    ;;
+  off-all)
+    off_cli
+    off_fpm
+    ;;
+  *)
+    echo
+    php -v
+    exit 1
+esac
+
+echo
+
+if [ ! $2 ]; then
+  sudo service apache2 restart
+  sudo service php7.0-fpm restart
+  echo
+  php -v
+fi
