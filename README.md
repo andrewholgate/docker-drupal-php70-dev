@@ -48,7 +48,7 @@ From the host server, add the web container IP address to the hosts file.
 
 ```bash
 # Add IP address to hosts file.
-./hosts.sh
+./host.sh
 ```
 
 ## Logging into Web Front-end
