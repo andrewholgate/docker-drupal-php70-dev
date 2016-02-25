@@ -30,18 +30,6 @@ RUN chmod +x /usr/local/bin/xdebug
 # Symlink log files.
 RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/
 
-# Install XHProf
-#RUN wget https://github.com/phacility/xhprof/archive/master.tar.gz && \
-#    tar zxvf master.tar.gz && \
-#    rm -f master.tar.gz
-#    cd xhprof-master/extension/ && \
-#    phpize && \
-#    ./configure --with-php-config=/usr/bin/php-config7.0 && \
-#    make && \
-#    make install && \
-#    make test && \
-#    rm -Rf ../xhprof-master
-
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
@@ -70,6 +58,19 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install imagemagick && \
 
 # Front-end tools
 RUN npm install -g phantomjs
+
+# Install XHProf
+RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
+    tar zxvf php7.tar.gz && \
+    rm -f php7.tar.gz && \
+    cd xhprof-php7/extension/ && \
+    phpize && \
+    ./configure --with-php-config=/usr/bin/php-config7.0 && \
+    make && \
+    sudo make install && \
+    rm -Rf ../xhprof-php7
+# Tests fail:
+# make test && \
 
 # Turn on PHP error reporting
 RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm/php.ini && \

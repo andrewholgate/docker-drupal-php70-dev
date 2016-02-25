@@ -5,6 +5,7 @@ Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with H
 ## Debugging Tools
 
 - [XDebug](http://www.xdebug.org/) - PHP debugging and profiling.
+- [XHProf](http://pecl.php.net/package/xhprof) - function-level hierarchical profiler.
 
 ## Front-end Tools
 
@@ -78,7 +79,3 @@ xdebug off
 xdebug on-all
 xdebug off-all
 ```
-
-# TODO
-
-- [XHProf](http://pecl.php.net/package/xhprof) - function-level hierarchical profiler.
