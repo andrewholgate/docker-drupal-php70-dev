@@ -38,7 +38,7 @@ cp docker-compose.yml.dist docker-compose.yml
 vim docker-compose.yml
 
 # Build docker containers using Docker Composer.
-sudo docker-compose build
+sudo docker-compose build --no-cache
 sudo docker-compose up -d
 ```
 
