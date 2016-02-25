@@ -65,6 +65,20 @@ cp local/bashrc.dist local/bashrc
 vim local/bashrc
 ```
 
+## XDebug enable and disable
+
+Note that XDebug CLI is disabled by default.
+
+```bash
+# Turn XDebug on / off in Apache.
+xdebug on
+xdebug off
+
+# Turn XDebug on / off fopr both Apache and CLI.
+xdebug on-all
+xdebug off-all
+```
+
 # TODO
 
 - [XHProf](http://pecl.php.net/package/xhprof) - function-level hierarchical profiler.

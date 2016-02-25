@@ -23,8 +23,10 @@ RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0RC4.tar.gz && \
     rm -Rf ../xdebug-XDEBUG_2_4_0RC4
 
 COPY xdebug.ini /etc/php/mods-available/xdebug.ini
-RUN ln -s /etc/php/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini
 RUN ln -s /etc/php/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+COPY xdebug /usr/local/bin/xdebug
+RUN chmod +x /usr/local/bin/xdebug
+
 # Symlink log files.
 RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/
 
