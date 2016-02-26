@@ -27,8 +27,10 @@ RUN ln -s /etc/php/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.i
 COPY xdebug /usr/local/bin/xdebug
 RUN chmod +x /usr/local/bin/xdebug
 
-# Symlink log files.
-RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/
+# Symlink log files and create empty log file
+RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
+    mkdir /var/log/xdebug && \
+    touch /var/log/xdebug/xdebug.log
 
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
