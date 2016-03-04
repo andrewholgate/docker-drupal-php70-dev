@@ -12,15 +12,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip d
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-xml
 
 # Install XDebug 2.4.0
-RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0RC4.tar.gz && \
-    tar zxvf XDEBUG_2_4_0RC4.tar.gz && \
-    rm -f XDEBUG_2_4_0RC4.tar.gz && \
-    cd xdebug-XDEBUG_2_4_0RC4 && \
+RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0.tar.gz && \
+    tar zxvf XDEBUG_2_4_0.tar.gz && \
+    rm -f XDEBUG_2_4_0.tar.gz && \
+    cd xdebug-XDEBUG_2_4_0 && \
     phpize && \
     ./configure --enable-xdebug && \
     make && \
     cp modules/xdebug.so /usr/lib/php/20151012/ && \
-    rm -Rf ../xdebug-XDEBUG_2_4_0RC4
+    rm -Rf ../xdebug-XDEBUG_2_4_0
 
 COPY xdebug.ini /etc/php/mods-available/xdebug.ini
 RUN ln -s /etc/php/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
@@ -35,14 +35,14 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.3.1 LTS
+# Install Node 4.3.2 LTS
 RUN cd /opt && \
-  wget https://nodejs.org/dist/v4.3.1/node-v4.3.1-linux-x64.tar.gz && \
-  tar -xzf node-v4.3.1-linux-x64.tar.gz && \
-  mv node-v4.3.1-linux-x64 node && \
+  wget https://nodejs.org/dist/v4.3.2/node-v4.3.2-linux-x64.tar.gz && \
+  tar -xzf node-v4.3.2-linux-x64.tar.gz && \
+  mv node-v4.3.2-linux-x64 node && \
   cd /usr/local/bin && \
   ln -s /opt/node/bin/* . && \
-  rm -f /opt/node-v4.3.1-linux-x64.tar.gz
+  rm -f /opt/node-v4.3.2-linux-x64.tar.gz
 
 USER ubuntu
 RUN echo 'export PATH="$PATH:$HOME/.npm-packages/bin"' >> ~/.bashrc && \
@@ -59,7 +59,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install imagemagick && \
     /bin/bash -l -c "gem install wraith"
 
 # Front-end tools
-RUN npm install -g phantomjs
+RUN npm install -g phantomjs-prebuilt
 
 # Install XHProf
 RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
