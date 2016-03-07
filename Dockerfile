@@ -35,18 +35,13 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.3.2 LTS
-RUN cd /opt && \
-  wget https://nodejs.org/dist/v4.3.2/node-v4.3.2-linux-x64.tar.gz && \
-  tar -xzf node-v4.3.2-linux-x64.tar.gz && \
-  mv node-v4.3.2-linux-x64 node && \
-  cd /usr/local/bin && \
-  ln -s /opt/node/bin/* . && \
-  rm -f /opt/node-v4.3.2-linux-x64.tar.gz
-
+# Install Node 4.3.x LTS via NVM
 USER ubuntu
-RUN echo 'export PATH="$PATH:$HOME/.npm-packages/bin"' >> ~/.bashrc && \
-    npm config set prefix '~/.npm-packages'
+RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash && \
+    cp -f ~/.nvm/nvm.sh ~/.nvm/nvm-tmp.sh && \
+    echo "nvm install 4.3; nvm alias default 4.3" >> ~/.nvm/nvm-tmp.sh && \
+    sh ~/.nvm/nvm-tmp.sh && \
+    rm ~/.nvm/nvm-tmp.sh
 USER root
 
 # Setup for Wraith
@@ -57,9 +52,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install imagemagick && \
     /bin/bash -l -c "rvm default" && \
     /bin/bash -l -c "rvm rubygems current" && \
     /bin/bash -l -c "gem install wraith"
-
-# Front-end tools
-RUN npm install -g phantomjs-prebuilt
 
 # Install XHProf
 RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \

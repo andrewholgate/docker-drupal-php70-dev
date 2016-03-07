@@ -10,7 +10,6 @@ Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with H
 ## Front-end Tools
 
 - [Wraith](https://github.com/BBC-News/wraith) - for visual regression testing.
-- [PhantomJS](http://phantomjs.org/) - for smoke tests.
 
 ## PHP Documentation Tools
 
@@ -18,7 +17,7 @@ Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with H
 - [Sphinx](http://sphinx-doc.org/) - generate beautiful [Read The Docs](http://docs.readthedocs.org/en/latest/) format using [Breathe](https://breathe.readthedocs.org/) as a bridge to DoxyGen XML output.
 
 # Other
-- [NodeJS](https://nodejs.org/) - Javascript runtime.
+- [NodeJS LTS](https://nodejs.org/) and [NVM (Node Version Manager)](https://github.com/creationix/nvm)
 - Java Runtime Environment (JRE) - project dev tools like [sitespeed.io](http://www.sitespeed.io/) need this.
 
 # Installation
