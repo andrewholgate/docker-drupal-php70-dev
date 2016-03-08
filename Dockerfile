@@ -66,6 +66,16 @@ RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
 # Tests fail:
 # make test && \
 
+# Disable Google Pagespeed
+RUN sed -ri 's/\s*ModPagespeed on/    ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
+
+# Local testing via BrowserStack automated tests
+RUN wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && \
+    unzip BrowserStackLocal-linux-x64.zip && \
+    chmod a+x BrowserStackLocal && \
+    mv BrowserStackLocal /usr/local/bin/ && \
+    rm BrowserStackLocal-linux-x64.zip
+
 # Turn on PHP error reporting
 RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm/php.ini && \
     sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/cli/php.ini  && \
@@ -79,9 +89,6 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm
     sed -ri 's/^;xmlrpc_errors\s*=\s*0/xmlrpc_errors = 1/g' /etc/php/7.0/cli/php.ini && \
     sed -ri 's/^zend.assertions\s*=\s*-1/zend.assertions = 1/g' /etc/php/7.0/fpm/php.ini && \
     sed -ri 's/^zend.assertions\s*=\s*-1/zend.assertions = 1/g' /etc/php/7.0/cli/php.ini
-
-# Disable Google Pagespeed
-RUN sed -ri 's/\s*ModPagespeed on/    ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
 
 # Grant ubuntu user access to sudo with no password.
 RUN apt-get -y install sudo && \

@@ -10,6 +10,7 @@ Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with H
 ## Front-end Tools
 
 - [Wraith](https://github.com/BBC-News/wraith) - for visual regression testing.
+- [BrowserStackLocal](https://www.browserstack.com) - for automating browser tests locally (need a paid account).
 
 ## PHP Documentation Tools
 
@@ -77,4 +78,13 @@ xdebug off
 # Turn XDebug on / off fopr both Apache and CLI.
 xdebug on-all
 xdebug off-all
+```
+
+## BrowserStack integration
+
+Use [BrowserStack credentials](https://www.browserstack.com/accounts/settings) to get `{Access Key}`
+
+```bash
+# Run BrowserStackLocal binary in background
+BrowserStackLocal {Access Key} </dev/null &>/dev/null &
 ```
