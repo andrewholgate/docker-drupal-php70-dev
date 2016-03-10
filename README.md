@@ -26,8 +26,8 @@ Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with H
 ## Create Presistant Database data-only container
 
 ```bash
-# Build database image based off MySQL 5.6
-sudo docker run -d --name mysql-drupal-php70-dev mysql:5.6 --entrypoint /bin/echo MySQL data-only container for Drupal Dev MySQL
+# Build database image based off MySQL 5.7
+sudo docker run -d --name mysql-drupal-php70-dev mysql:5.7 --entrypoint /bin/echo MySQL data-only container for Drupal Dev MySQL
 ```
 
 ## Build Project using Docker Compose
