@@ -8,8 +8,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip doxygen && \
     DEBIAN_FRONTEND=noninteractive pip install sphinx_rtd_theme breathe
 
-# XML needed by PHPCodeSniffer 2.3+ and other developer tools.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-xml
+# XML needed by PHPCodeSniffer 2.3+
+# SQLite needed by Phan
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-xml php7.0-sqlite
 
 # Install XDebug 2.4.0
 RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0.tar.gz && \
@@ -75,6 +76,17 @@ RUN wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux
     chmod a+x BrowserStackLocal && \
     mv BrowserStackLocal /usr/local/bin/ && \
     rm BrowserStackLocal-linux-x64.zip
+
+# Install AST (for use with Phan)
+RUN git clone https://github.com/nikic/php-ast.git && \
+    cd php-ast && \
+    phpize && \
+    ./configure && \
+    make install && \
+    rm -Rf ../php-ast
+
+COPY ast.ini /etc/php/mods-available/ast.ini
+RUN ln -s /etc/php/mods-available/ast.ini /etc/php/7.0/cli/conf.d/20-ast.ini
 
 # Turn on PHP error reporting
 RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm/php.ini && \
