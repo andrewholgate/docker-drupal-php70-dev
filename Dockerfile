@@ -1,4 +1,4 @@
-FROM andrewholgate/drupal-php70:0.4.1
+FROM andrewholgate/drupal-php70:0.4.2
 MAINTAINER Andrew Holgate <andrewholgate@yahoo.com>
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -8,43 +8,41 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip doxygen && \
     DEBIAN_FRONTEND=noninteractive pip install sphinx_rtd_theme breathe
 
-# XML needed by PHPCodeSniffer 2.3+ and other developer tools.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-xml
+# XML needed by PHPCodeSniffer 2.3+
+# SQLite needed by Phan
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-xml php7.0-sqlite php-ast
 
 # Install XDebug 2.4.0
-RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0RC4.tar.gz && \
-    tar zxvf XDEBUG_2_4_0RC4.tar.gz && \
-    rm -f XDEBUG_2_4_0RC4.tar.gz && \
-    cd xdebug-XDEBUG_2_4_0RC4 && \
+RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0.tar.gz && \
+    tar zxvf XDEBUG_2_4_0.tar.gz && \
+    rm -f XDEBUG_2_4_0.tar.gz && \
+    cd xdebug-XDEBUG_2_4_0 && \
     phpize && \
     ./configure --enable-xdebug && \
     make && \
     cp modules/xdebug.so /usr/lib/php/20151012/ && \
-    rm -Rf ../xdebug-XDEBUG_2_4_0RC4
+    rm -Rf ../xdebug-XDEBUG_2_4_0
 
 COPY xdebug.ini /etc/php/mods-available/xdebug.ini
 RUN ln -s /etc/php/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
 COPY xdebug /usr/local/bin/xdebug
 RUN chmod +x /usr/local/bin/xdebug
 
-# Symlink log files.
-RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/
+# Symlink log files and create empty log file
+RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
+    mkdir /var/log/xdebug && \
+    touch /var/log/xdebug/xdebug.log
 
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.3.1 LTS
-RUN cd /opt && \
-  wget https://nodejs.org/dist/v4.3.1/node-v4.3.1-linux-x64.tar.gz && \
-  tar -xzf node-v4.3.1-linux-x64.tar.gz && \
-  mv node-v4.3.1-linux-x64 node && \
-  cd /usr/local/bin && \
-  ln -s /opt/node/bin/* . && \
-  rm -f /opt/node-v4.3.1-linux-x64.tar.gz
-
+# Install Node 4.4.x LTS (https://nodejs.org/) via NVM
 USER ubuntu
-RUN echo 'export PATH="$PATH:$HOME/.npm-packages/bin"' >> ~/.bashrc && \
-    npm config set prefix '~/.npm-packages'
+RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash && \
+    cp -f ~/.nvm/nvm.sh ~/.nvm/nvm-tmp.sh && \
+    echo "nvm install 4.4; nvm alias default 4.4" >> ~/.nvm/nvm-tmp.sh && \
+    sh ~/.nvm/nvm-tmp.sh && \
+    rm ~/.nvm/nvm-tmp.sh
 USER root
 
 # Setup for Wraith
@@ -55,9 +53,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install imagemagick && \
     /bin/bash -l -c "rvm default" && \
     /bin/bash -l -c "rvm rubygems current" && \
     /bin/bash -l -c "gem install wraith"
-
-# Front-end tools
-RUN npm install -g phantomjs
 
 # Install XHProf
 RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
@@ -72,6 +67,16 @@ RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
 # Tests fail:
 # make test && \
 
+# Disable Google Pagespeed
+RUN sed -ri 's/\s*ModPagespeed on/    ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
+
+# Local testing via BrowserStack automated tests
+RUN wget https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip && \
+    unzip BrowserStackLocal-linux-x64.zip && \
+    chmod a+x BrowserStackLocal && \
+    mv BrowserStackLocal /usr/local/bin/ && \
+    rm BrowserStackLocal-linux-x64.zip
+
 # Turn on PHP error reporting
 RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm/php.ini && \
     sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/cli/php.ini  && \
@@ -85,9 +90,6 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php/7.0/fpm
     sed -ri 's/^;xmlrpc_errors\s*=\s*0/xmlrpc_errors = 1/g' /etc/php/7.0/cli/php.ini && \
     sed -ri 's/^zend.assertions\s*=\s*-1/zend.assertions = 1/g' /etc/php/7.0/fpm/php.ini && \
     sed -ri 's/^zend.assertions\s*=\s*-1/zend.assertions = 1/g' /etc/php/7.0/cli/php.ini
-
-# Disable Google Pagespeed
-RUN sed -ri 's/\s*ModPagespeed on/    ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
 
 # Grant ubuntu user access to sudo with no password.
 RUN apt-get -y install sudo && \
