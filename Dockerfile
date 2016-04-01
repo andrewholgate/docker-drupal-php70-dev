@@ -36,11 +36,11 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.3.x LTS via NVM
+# Install Node 4.4.x LTS (https://nodejs.org/) via NVM
 USER ubuntu
 RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash && \
     cp -f ~/.nvm/nvm.sh ~/.nvm/nvm-tmp.sh && \
-    echo "nvm install 4.3; nvm alias default 4.3" >> ~/.nvm/nvm-tmp.sh && \
+    echo "nvm install 4.4; nvm alias default 4.4" >> ~/.nvm/nvm-tmp.sh && \
     sh ~/.nvm/nvm-tmp.sh && \
     rm ~/.nvm/nvm-tmp.sh
 USER root
