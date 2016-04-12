@@ -36,14 +36,10 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
 # Install JRE (needed for some testing tools like sitespeed.io) and libs for PhantomJS.
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
-# Install Node 4.4.x LTS (https://nodejs.org/) via NVM
-USER ubuntu
-RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash && \
-    cp -f ~/.nvm/nvm.sh ~/.nvm/nvm-tmp.sh && \
-    echo "nvm install 4.4; nvm alias default 4.4" >> ~/.nvm/nvm-tmp.sh && \
-    sh ~/.nvm/nvm-tmp.sh && \
-    rm ~/.nvm/nvm-tmp.sh
-USER root
+# Install Node 4 LTS (https://nodejs.org/)
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN apt-get install -y nodejs
+RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 
 # Setup for Wraith
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install imagemagick && \
@@ -62,7 +58,7 @@ RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
     phpize && \
     ./configure --with-php-config=/usr/bin/php-config7.0 && \
     make && \
-    sudo make install && \
+    make install && \
     rm -Rf ../xhprof-php7
 # Tests fail:
 # make test && \
