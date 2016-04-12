@@ -58,7 +58,7 @@ RUN wget https://github.com/RustJason/xhprof/archive/php7.tar.gz && \
     phpize && \
     ./configure --with-php-config=/usr/bin/php-config7.0 && \
     make && \
-    sudo make install && \
+    make install && \
     rm -Rf ../xhprof-php7
 # Tests fail:
 # make test && \
