@@ -16,5 +16,3 @@ $CONTAINER_NAME) $URL >> /etc/hosts"
 echo
 echo Login to container: sudo docker exec -it $CONTAINER_NAME su - ubuntu
 echo Opening site: xdg-open http://$URL
-
-

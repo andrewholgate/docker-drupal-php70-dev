@@ -1,4 +1,4 @@
-Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 14.04 with HTTP/2. This image is the development companion to the [docker-drupal-php70](https://github.com/andrewholgate/docker-drupal-php70) project.
+Dockerised Drupal 8 development environment using PHP 7.0 on Ubuntu 16.04 with HTTP/2. This image is the development companion to the [docker-drupal-php70](https://github.com/andrewholgate/docker-drupal-php70) project.
 
 # Included Tools
 

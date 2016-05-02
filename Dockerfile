@@ -1,4 +1,4 @@
-FROM andrewholgate/drupal-php70:0.4.2
+FROM andrewholgate/drupal-php70:0.5.0
 MAINTAINER Andrew Holgate <andrewholgate@yahoo.com>
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -10,7 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip d
 
 # XML needed by PHPCodeSniffer 2.3+
 # SQLite needed by Phan
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.0-xml php7.0-sqlite php-ast
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php-xml php-sqlite3 php-ast
 
 # Install XDebug 2.4.0
 RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0.tar.gz && \
@@ -37,7 +37,7 @@ RUN ln -s /var/log/xdebug/xdebug.log /var/www/log/ && \
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install default-jre libfreetype6 libfontconfig
 
 # Install Node 4 LTS (https://nodejs.org/)
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get install -y nodejs
 RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 
