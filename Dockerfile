@@ -9,8 +9,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-sphinx python-pip d
     DEBIAN_FRONTEND=noninteractive pip install sphinx_rtd_theme breathe
 
 # XML needed by PHPCodeSniffer 2.3+
-# SQLite needed by Phan
+# AST and SQLite needed by Phan
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php-xml php-sqlite3 php-ast
+RUN ln -s /etc/php/mods-available/ast.ini /etc/php/7.0/cli/conf.d/20-ast.ini
 
 # Install XDebug 2.4.0
 RUN wget https://github.com/xdebug/xdebug/archive/XDEBUG_2_4_0.tar.gz && \
